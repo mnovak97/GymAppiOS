@@ -31,6 +31,7 @@ struct ExerciseView: View {
                 PrimaryButton(buttonTitle: "Create your own exercise") {
                     navigateToCreateExercise = true
                 }
+                .padding([.leading, .trailing])
                 .navigationDestination(isPresented: $navigateToCreateExercise) {
                     CustomExerciseView()
                 }

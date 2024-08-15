@@ -55,6 +55,7 @@ struct LogExerciseView: View {
                 
             }
             .padding(.top)
+            .padding([.leading, .trailing])
             Spacer()
         }
     }

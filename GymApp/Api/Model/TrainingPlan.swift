@@ -8,9 +8,9 @@
 import Foundation
 
 struct TrainingPlan: Codable {
-    let planId: Int
-    let userId: Int
-    let planName: String
-    let description: String
-    let trainingPlanExercises: [TrainingPlanExercise]
+    let planId: Int?
+    let userId: Int?
+    let planName: String?
+    let description: String?
+    let trainingPlanExercises: [TrainingPlanExercise]?
 }

@@ -36,7 +36,6 @@ struct PrimaryButton: View {
                 }
             }
             .disabled(isLoading)
-            .padding([.leading, .trailing])
         }
 }
 

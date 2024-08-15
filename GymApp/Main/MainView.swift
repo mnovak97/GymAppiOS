@@ -16,7 +16,7 @@ struct MainView: View {
                     .tabItem {
                         Image(systemName: "dumbbell")
                     }
-                PlaningView()
+                TrainingPlanListView()
                     .tabItem {
                         Image(systemName: "calendar.badge.plus")
                     }

@@ -9,31 +9,27 @@ import Foundation
 
 class ApiClient: BaseApiClient {
     
+    func createTrainingPlan(with trainingPlan: TrainingPlan) async throws -> TrainingPlan {
+        let trainingPlan = try await postRequest(urlString: "TrainingPlan", requestData: trainingPlan)
+        return trainingPlan
+    }
+    
     func createUser(with user: User) async throws -> User {
         let user = try await postRequest(urlString: "User", requestData: user)
-        
         return user
     }
     
+    func createCustomExercise(with customExercise: CustomExercise) async throws -> CustomExercise {
+        let customExercise = try await postRequest(urlString: "CustomExercise", requestData: customExercise)
+        return customExercise
+    }
+    
     func getExercises() async throws -> [Exercise] {
-        var exercises: [Exercise] = []
-        guard let url = makeRequestUrl(with: "Exercise") else {
-            throw NetworkError.invalidURL
-        }
-        
-        let (data, response) = try await URLSession.shared.data(from: url)
-        
-        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
-            throw NetworkError.invalidResponse
-        }
-        
-        do {
-             exercises = try JSONDecoder().decode([Exercise].self, from: data)
-        } catch {
-            print(String(describing: error))
-            throw NetworkError.invalidData
-        }
-        return exercises
+        return try await getRequest(urlString: "Exercise")
+    }
+    
+    func getTrainingPlans() async throws -> [TrainingPlan] {
+        return try await getRequest(urlString: "TrainingPlan")
     }
     
     func loginUser(username: String, password: String) async throws -> User {

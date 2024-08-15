@@ -27,6 +27,7 @@ struct ProfileEditView: View {
             PrimaryButton(buttonTitle: "Done") {
                 
             }
+            .padding([.leading, .trailing])
         }
     }
 }

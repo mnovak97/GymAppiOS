@@ -65,22 +65,19 @@ extension BaseApiClient {
         guard let url = makeRequestUrl(with: urlString) else {
             throw NetworkError.invalidURL
         }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-        
-        let (data, response) = try await URLSession.shared.data(for: request)
-        
-        guard let httpResponse = response as? HTTPURLResponse else {
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+            
+        guard let response = response as? HTTPURLResponse, response.statusCode == 200 else {
             throw NetworkError.invalidResponse
         }
-        
-        switch httpResponse.statusCode {
-            case 200:
-                let returnedData = try JSONDecoder().decode(T.self, from: data)
-                return returnedData
-            default:
-                throw NetworkError.invalidResponse
+
+        do {
+            let result = try JSONDecoder().decode(T.self, from: data)
+            return result
+        } catch {
+            print(String(describing: error))
+            throw NetworkError.invalidData
         }
     }
 }

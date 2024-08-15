@@ -9,10 +9,10 @@ import Foundation
 
 struct CustomExercise: Codable {
     
-    let customExerciseId: Int
-    let userId: Int
-    let name: String
-    let category: String
-    let userExercises: [UserExercise]
-    let trainingPlanExercises: [TrainingPlanExercise]
+    let customExerciseId: Int?
+    let userId: Int?
+    let name: String?
+    let category: String?
+    let userExercises: [UserExercise]?
+    let trainingPlanExercises: [TrainingPlanExercise]?
 }

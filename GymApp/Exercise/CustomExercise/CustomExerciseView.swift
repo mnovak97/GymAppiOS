@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct CustomExerciseView: View {
-    @State var exerciseName: String = ""
-    @State var category: String = ""
+    @ObservedObject var viewModel = CustomExerciseViewModel()
     var body: some View {
         VStack {
             Text("Create your own exercise")
@@ -23,16 +22,17 @@ struct CustomExerciseView: View {
             Spacer()
             
             CustomLabel(labelText: "Exercise name", isMandatory: false)
-            CustomTextField(image: "", inputText: $exerciseName)
+            CustomTextField(image: "", inputText: $viewModel.name)
                 .padding(.bottom, 20)
             
             CustomLabel(labelText: "Category", isMandatory: false)
-            CustomTextField(image: "", inputText: $category)
+            CustomTextField(image: "", inputText: $viewModel.category)
             
             PrimaryButton(buttonTitle: "Create") {
-                
+                viewModel.createCustomExercise()
             }
             .padding(.top, 20)
+            .padding([.leading, .trailing])
             Spacer()
         }
     }
