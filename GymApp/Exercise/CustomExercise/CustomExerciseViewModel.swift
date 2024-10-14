@@ -18,7 +18,7 @@ class CustomExerciseViewModel: ObservableObject {
         Task {
             do {
                 if user != nil {
-                    let customExercise = try await apiClient.createCustomExercise(with: CustomExercise(customExerciseId: nil, userId: user?.userId, name: name, category: category, userExercises: nil, trainingPlanExercises: nil))
+                    _ = try await apiClient.createCustomExercise(with: CustomExercise(customExerciseId: nil, userId: user?.userId, name: name, category: category, userExercises: nil, trainingPlanExercises: nil))
                 }
             } catch let error as NetworkError {
                 print(error.description)

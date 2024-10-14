@@ -36,6 +36,7 @@ struct LoginPage: View {
                     authViewModel.logInUser(username: username, password: password)
                 }, isLoading: authViewModel.isLoading)
                 .padding(.top, 10)
+                .padding([.leading, .trailing])
             }
         }
         .alert("Error", isPresented: $authViewModel.showAlert, actions: {

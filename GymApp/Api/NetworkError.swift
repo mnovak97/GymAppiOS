@@ -13,6 +13,7 @@ enum NetworkError: Error, CustomStringConvertible {
     case invalidResponse
     case invalidData
     case conflict
+    case notFound
     case unauthorized
     case other(Error)
     
@@ -30,6 +31,8 @@ enum NetworkError: Error, CustomStringConvertible {
             return "Invalid Data"
         case .other(let error):
             return "Other Error: \(error.localizedDescription)"
+        case .notFound:
+            return "Not found"
         }
     }
 }

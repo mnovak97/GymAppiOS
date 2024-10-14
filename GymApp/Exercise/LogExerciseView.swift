@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct LogExerciseView: View {
-    @State var exercise: Exercise
-    @State private var weightString: String = ""
-    @State private var weightInt: Int? = nil
-    @State private var repsString: String = ""
-    @State private var repsInt: Int? = nil
+    @ObservedObject var viewModel = LogExerciseViewModel()
+    @State var exercise: LoggableExercise
+    var exerciseId: Int? = nil
+    var customExerciseId: Int? = nil
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         VStack {
             Spacer()
@@ -26,10 +27,10 @@ struct LogExerciseView: View {
             CustomLabel(labelText: "Select a weight for you exercise", isMandatory: false)
                 .padding(.top, 50)
             HStack {
-                TextField("", text: $weightString)
+                TextField("", text: $viewModel.weightString)
                     .keyboardType(.numberPad)
-                    .onChange(of: weightString) { newValue, _ in
-                        filterWeight(newValue)
+                    .onChange(of: viewModel.weightString) { newValue, _ in
+                        viewModel.filterWeight(newValue)
                     }
                     .frame(width: 50)
                     .modifier(OutterShadow())
@@ -41,41 +42,28 @@ struct LogExerciseView: View {
             CustomLabel(labelText: "Number of reps", isMandatory: false)
                 .padding(.top)
             HStack {
-                TextField("", text: $repsString)
+                TextField("", text: $viewModel.repsString)
                     .keyboardType(.numberPad)
-                    .onChange(of: repsString) { newValue, _ in
-                        filterReps(newValue)
+                    .onChange(of: viewModel.repsString) { newValue, _ in
+                        viewModel.filterReps(newValue)
                     }
                     .frame(width: 50)
                     .modifier(OutterShadow())
                     .padding(.leading)
                 Spacer()
             }
-            PrimaryButton(buttonTitle: "Log the exercise") {
-                
-            }
+            PrimaryButton(buttonTitle: "Log the exercise", action: {
+                viewModel.logUserExercise(exerciseId: exerciseId, customExerciseId: customExerciseId)
+            }, isLoading: viewModel.isLoading)
             .padding(.top)
             .padding([.leading, .trailing])
+            .onAppear {
+                viewModel.onDismiss = {
+                    dismiss()
+                }
+            }
             Spacer()
         }
-    }
-    
-    private func filterWeight(_ value: String) {
-        if let intValue = Int(value) {
-            self.weightInt = intValue
-        } else {
-            self.weightInt = nil
-        }
-        self.weightString = value.filter {"0123456789".contains($0)}
-    }
-    
-    private func filterReps(_ value: String) {
-        if let intValue = Int(value) {
-            self.repsInt = intValue
-        } else {
-            self.repsInt = nil
-        }
-        self.repsString = value.filter {"0123456789".contains($0)}
     }
 }
 

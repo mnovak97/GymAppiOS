@@ -91,6 +91,7 @@ struct RegisterPage: View {
                 .disabled(!authViewModel.isFormValid)
                 .opacity(authViewModel.isFormValid ? 1.0 : 0.5)
                 .padding(.top, 20)
+                .padding([.leading, .trailing])
             }
         }
         .alert("Error", isPresented: $authViewModel.showAlert, actions: {

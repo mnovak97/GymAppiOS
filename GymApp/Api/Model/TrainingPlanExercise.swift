@@ -8,10 +8,8 @@
 import Foundation
 
 struct TrainingPlanExercise: Codable {
-    let planExerciseId: Int
+    let planExerciseId: Int?
     let planId: Int
-    let exerciseId: Int
-    let customExerciseId: Int
-    let sets: Int
-    let repetitions: Int
+    let exerciseId: Int?
+    let customExerciseId: Int?
 }

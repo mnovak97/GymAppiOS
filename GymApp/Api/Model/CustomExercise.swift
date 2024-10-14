@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CustomExercise: Codable {
+struct CustomExercise: Codable, LoggableExercise {
     
     let customExerciseId: Int?
     let userId: Int?

@@ -24,8 +24,67 @@ class ApiClient: BaseApiClient {
         return customExercise
     }
     
+    func getExerciseName(id: Int) async throws -> String {
+        let url = URL(string: "\(baseUrl)/Exercise/\(id)/name")!
+
+        let (data, response) = try await URLSession.shared.data(from: url)
+
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw NetworkError.invalidResponse
+        }
+        
+        guard (200...299).contains(httpResponse.statusCode) else {
+            let errorMessage = String(data: data, encoding: .utf8) ?? "Unknown error"
+            print("Server returned error: \(errorMessage)")
+            throw NetworkError.invalidResponse
+        }
+
+        guard let exerciseName = String(data: data, encoding: .utf8) else {
+            print("Failed to convert data to string.")
+            throw NetworkError.invalidData
+        }
+            
+        return exerciseName
+    }
+    
     func getExercises() async throws -> [Exercise] {
         return try await getRequest(urlString: "Exercise")
+    }
+    
+    func getUserExercises(id: Int) async throws -> [UserExercise] {
+        return try await getRequest(urlString: "UserExercise" + "/\(String(id))/user")
+    }
+    
+    func getExerciseById(id: Int) async throws -> Exercise {
+        return try await getRequest(urlString: "Exercise" + "/\(String(id))")
+    }
+    
+    func getCustomExerciseById(id: Int) async throws -> CustomExercise {
+        return try await getRequest(urlString: "CustomExercise" + "/\(String(id))")
+    }
+    
+    func getTrainingPlanExercises(trainingPlanId: Int) async throws -> [TrainingPlanExercise] {
+        return try await getRequest(urlString: "TrainingPlan" + "/\(String(trainingPlanId))/exercises")
+    }
+    
+    func logExercise(userExercise: UserExercise) async throws -> UserExercise {
+        let userExercise = try await postRequest(urlString: "UserExercise/log", requestData: userExercise)
+        return userExercise
+    }
+    
+    func addExercisesToTrainingPlan(trainingPlanId: Int, selectedExercises: [TrainingPlanExercise]) async throws {
+        try await postRequest(
+            urlString: "TrainingPlan/addExercises" + "/\(String(trainingPlanId))",
+            requestData: selectedExercises
+        )
+    }
+    
+    func getTrainingPlan(forID id: Int) async throws -> TrainingPlan {
+        return try await getRequest(urlString: "TrainingPlan" + "/\(String(id))")
+    }
+    
+    func getCustomExercises() async throws -> [CustomExercise] {
+        return try await getRequest(urlString: "CustomExercise")
     }
     
     func getTrainingPlans() async throws -> [TrainingPlan] {

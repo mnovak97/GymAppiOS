@@ -1,24 +1,22 @@
 //
-//  ExerciseView.swift
+//  TrainingPlanExerciseListView.swift
 //  GymApp
 //
-//  Created by Martin Novak on 20.07.2024..
+//  Created by Martin Novak on 03.10.2024..
 //
 
 import SwiftUI
 
-struct ExerciseView: View {
-    @ObservedObject var viewModel = ExercisesViewModel()
-    @State private var navigateToCreateExercise = false
-    var trainingPlanId: Int? = nil
+struct TrainingPlanExerciseListView: View {
+    @ObservedObject var viewModel =  TrainingPlanExerciseListViewModel()
+    var trainingPlanId: Int
     
     var body: some View {
         NavigationStack {
             VStack {
-                Text("Select exercise")
+                Text("Training plan exercises")
                     .font(.title3)
                     .bold()
-                
                 ScrollView {
                     VStack {
                         ForEach(viewModel.exercises, id: \.exerciseId) { exercise in
@@ -30,7 +28,7 @@ struct ExerciseView: View {
                             }
                         }
                     }.padding(.top)
-                    
+                        
                     VStack {
                         ForEach(viewModel.customExercises, id: \.customExerciseId) { customExercise in
                             NavigationLink {
@@ -41,31 +39,17 @@ struct ExerciseView: View {
                             }
                         }
                     }
-                    
-                }
-                Spacer()
-                if trainingPlanId == nil {
-                    PrimaryButton(buttonTitle: "Create your own exercise") {
-                        navigateToCreateExercise = true
-                    }
-                    .padding([.leading, .trailing])
-                    .padding(.bottom)
-                    .navigationDestination(isPresented: $navigateToCreateExercise) {
-                                CustomExerciseView()
-                    }
                 }
             }
-        }
-        .onAppear {
-            if let trainingPlanId = trainingPlanId {
-                viewModel.loadExercises(forID: trainingPlanId)
-            } else {
-                viewModel.loadExercises()
+            .onAppear {
+                if viewModel.customExercises.isEmpty && viewModel.exercises.isEmpty {
+                    viewModel.fetchExercises(for: trainingPlanId)
+                }
             }
         }
     }
 }
 
 #Preview {
-    ExerciseView()
+    TrainingPlanExerciseListView(trainingPlanId: 1)
 }

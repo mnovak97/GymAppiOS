@@ -8,8 +8,22 @@
 import SwiftUI
 
 struct GraphView: View {
+    @ObservedObject var viewModel = GraphViewModel()
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ScrollView {
+            VStack {
+                ForEach(Array(viewModel.groupExercisesById(exercises: viewModel.userExercises).keys), id: \.self) { key in
+                    if let exerciseGroup = viewModel.groupExercisesById(exercises: viewModel.userExercises)[key] {
+                        let graphData = viewModel.prepareGraphData(for: exerciseGroup)
+                        let exerciseName = viewModel.exerciseNames[key] ?? "Exercise"
+                        
+                        ExerciseGraphView(graphData: graphData, exerciseName: exerciseName)
+                            .padding()
+                    }
+                }
+            }
+        }
     }
 }
 

@@ -9,9 +9,11 @@ import Foundation
 
 struct UserExercise: Codable {
     
-    let userExerciseId: Int
+    let userExerciseId: Int?
     let userId: Int
-    let exerciseId: Int
+    let exerciseId: Int?
+    let customExerciseId: Int?
     let weight: Int
     let repetitions: Int
+    let date: String
 }

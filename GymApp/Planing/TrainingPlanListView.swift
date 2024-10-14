@@ -9,20 +9,28 @@ import SwiftUI
 
 struct TrainingPlanListView: View {
     @State private var navigateToCreateTrainingPlan = false
+    @State private var navigateToExerciseView = false
+    @State private var navigateToTrainingPlanExercisesView = false
+    @State private var selectedPlan: TrainingPlan? = nil
     @ObservedObject var viewModel = TrainingPlanViewModel()
     var body: some View {
         VStack {
             Text("Training plans")
                 .font(.title3)
                 .bold()
-            LazyVStack {
+            VStack {
                 ForEach(viewModel.trainingPlans, id: \.planId) { trainingPlan in
-                    NavigationLink {
-                        
-                    } label: {
-                        TrainingPlanView(planName: trainingPlan.planName ?? "", description: trainingPlan.description ?? "")
-                    }
-                    .foregroundStyle(.black)
+                        TrainingPlanView(
+                            planName: trainingPlan.planName ?? "",
+                            description: trainingPlan.description ?? "",
+                            viewAction: {
+                                selectedPlan = trainingPlan
+                                navigateToExerciseView = true
+                        },
+                            addAction: {
+                                selectedPlan = trainingPlan
+                                navigateToTrainingPlanExercisesView = true
+                        })
                     .padding([.leading, .trailing])
                 }
             }
@@ -32,13 +40,19 @@ struct TrainingPlanListView: View {
                 navigateToCreateTrainingPlan = true
             }
             .padding([.leading, .trailing])
-            .navigationDestination(isPresented: $navigateToCreateTrainingPlan) {
-                CreateTrainingPlanView()
-            }
         }
         .safeAreaPadding(.bottom)
         .onAppear {
             viewModel.loadTrainingPlans()
+        }
+        .navigationDestination(isPresented: $navigateToCreateTrainingPlan) {
+            CreateTrainingPlanView()
+        }
+        .navigationDestination(isPresented: $navigateToExerciseView) {
+            TrainingPlanExerciseListView(trainingPlanId: selectedPlan?.planId ?? 0)
+        }
+        .navigationDestination(isPresented: $navigateToTrainingPlanExercisesView) {
+            TrainingPlanExercisesView(trainingPlan: selectedPlan)
         }
     }
 }
