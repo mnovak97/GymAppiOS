@@ -48,6 +48,7 @@ class LogExerciseViewModel: ObservableObject {
         isLoading = true
         Task {
             do {
+                print(userExercise)
                 _ = try await apiClient.logExercise(userExercise: userExercise)
                 DispatchQueue.main.async {
                     self.isLoading = false

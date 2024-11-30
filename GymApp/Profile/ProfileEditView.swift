@@ -9,12 +9,23 @@ import SwiftUI
 import Combine
 
 struct ProfileEditView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @ObservedObject var profileViewModel = ProfileViewModel()
     var editType: EditType
     @State var textField: String = ""
     
     var body: some View {
         VStack (spacing: 30){
+            HStack {
+                Text("Current \(editType.rawValue.capitalized):")
+                switch editType {
+                case .weight:
+                    Text("\(profileViewModel.user?.weight ?? 0) kg")
+                case .height:
+                    Text("\(profileViewModel.user?.height ?? 0) cm")
+                case .age:
+                    Text("\(profileViewModel.user?.age ?? 0)")
+                }
+            }
             switch editType {
             case .weight:
                 numberEditView(placeholder: "Weight:")
@@ -25,7 +36,7 @@ struct ProfileEditView: View {
             }
             
             PrimaryButton(buttonTitle: "Done") {
-                
+                profileViewModel.updateUser(editType: editType, value: Int(textField) ?? 0)
             }
             .padding([.leading, .trailing])
         }

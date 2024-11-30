@@ -47,6 +47,11 @@ class ApiClient: BaseApiClient {
         return exerciseName
     }
     
+    func updateUser(user: User) async throws -> User {
+        let updatedUser = try await putRequest(urlString: "User/\(String(user.userId ?? 0))", requestData: user)
+        return updatedUser
+    }
+    
     func getExercises() async throws -> [Exercise] {
         return try await getRequest(urlString: "Exercise")
     }

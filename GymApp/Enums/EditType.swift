@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum EditType {
+enum EditType: String {
     case weight
     case height
     case age

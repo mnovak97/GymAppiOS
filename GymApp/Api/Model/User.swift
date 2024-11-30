@@ -15,10 +15,10 @@ struct User: Codable {
     let email: String?
     let firstName: String?
     let lastName: String?
-    let age: Int?
+    var age: Int?
     let gender: Gender
-    let weight: Int?
-    let height: Int?
+    var weight: Int?
+    var height: Int?
     let userExercises: [UserExercise]?
     let customExercises: [CustomExercise]?
     let trainingPlans: [TrainingPlan]?

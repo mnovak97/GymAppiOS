@@ -19,7 +19,7 @@ protocol BaseApiClient {
 extension BaseApiClient {
     
     var baseUrl: String {
-        "https://8fa4-78-0-193-25.ngrok-free.app/api"
+        "https://e867-78-3-168-110.ngrok-free.app/api"
     }
     
     func makeRequestUrl(with url: String) -> URL? {
@@ -29,7 +29,7 @@ extension BaseApiClient {
         return url
     }
     
-    func putRequest<T: Codable>(urlString: String, requestData: T?) async throws {
+    func putRequest<T: Codable>(urlString: String, requestData: T?) async throws -> T {
         guard let url = makeRequestUrl(with: urlString) else {
             throw NetworkError.invalidURL
         }
@@ -44,7 +44,7 @@ extension BaseApiClient {
             request.httpBody = jsonData
         }
         
-        let (_, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await URLSession.shared.data(for: request)
         
         guard let httpResponse = response as? HTTPURLResponse else {
             throw NetworkError.invalidResponse
@@ -52,7 +52,9 @@ extension BaseApiClient {
         
         switch httpResponse.statusCode {
         case 200, 204:
-            return
+            let decoder = JSONDecoder()
+            let createdData = try decoder.decode(T.self, from: data)
+            return createdData
         case 404:
             throw NetworkError.notFound
         case 409:
@@ -95,9 +97,10 @@ extension BaseApiClient {
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
-        
-            
         let jsonData = try JSONEncoder().encode(requestData)
+        if let jsonString = String(data: jsonData, encoding: .utf8) {
+            print("POST Request Body: \(jsonString)")
+        }
         request.httpBody = jsonData
         
             
